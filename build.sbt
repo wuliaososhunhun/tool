@@ -5,12 +5,13 @@ version := "1.0"
 scalaVersion := "2.11.8"
 
 libraryDependencies ++= Seq(
+  "com.github.scopt" %% "scopt" % "3.4.0",
+  "org.scalaz" %% "scalaz-core" % "7.2.3"
 )
 
 val ivyLocal = Resolver.file("local", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns)
 
 val resolvers = Seq(
   ivyLocal,
-  "TypeSafe Releases" at "http://maven/nexus/content/repositories/typesafe-releases/",
-  "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+  Resolver.sonatypeRepo("public")
 )
