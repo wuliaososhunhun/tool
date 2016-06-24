@@ -5,7 +5,7 @@ version := "1.0"
 scalaVersion := "2.11.8"
 
 libraryDependencies ++= Seq(
-  "com.github.scopt" %% "scopt" % "3.4.0",
+  "com.github.scopt" %% "scopt" % "3.5.0",
   "org.scalaz" %% "scalaz-core" % "7.2.3"
 )
 
