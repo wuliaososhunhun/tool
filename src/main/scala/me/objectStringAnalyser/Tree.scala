@@ -7,15 +7,13 @@ import scala.annotation.tailrec
   * Date: 23/05/2016
   */
 case class Tree(value: String, nodes: List[Tree]) {
-  def prettyPrint(level: Int): Unit = {
-    Tree.printSpace(2 * level)
-    print(value)
+  def show(level: Int): List[String] = {
+    val indent = Tree.indent * level
+    val firstLine = indent + value
     if (nodes.nonEmpty) {
-      Tree.printLeftBracket()
-      Tree.prettyPrintNodes(nodes, level + 1)
-      Tree.printNewLine()
-      Tree.printSpace(2 * level)
-      Tree.printRightBracket()
+      (firstLine + Tree.leftBracket) +: Tree.showTreeNodes(nodes, level + 1) :+ (indent + Tree.rightBracket)
+    } else {
+      firstLine :: Nil
     }
   }
 }
@@ -24,30 +22,31 @@ object Tree {
   val leftBracket = '('
   val rightBracket = ')'
   val comma = ','
+  val indent = " " * 2
 
-  def printLeftBracket(): Unit = print(leftBracket)
-
-  def printRightBracket(): Unit = print(rightBracket)
-
-  def printComma(): Unit = print(comma)
-
-  def printSpace(number: Int): Unit = print(" " * number)
-
-  def printNewLine(): Unit = println()
-
-  @tailrec
-  def prettyPrintNodes(nodes: List[Tree], level: Int): Unit = {
-    nodes match {
-      case Nil => // do nothing
-      case head :: Nil =>
-        Tree.printNewLine()
-        head.prettyPrint(level)
-      case head :: tail =>
-        Tree.printNewLine()
-        head.prettyPrint(level)
-        Tree.printComma()
-        prettyPrintNodes(tail, level)
+  def showTreeNodes(nodes: List[Tree], level: Int): List[String] = {
+    @tailrec
+    def showTreeNodesRec(n: List[Tree], l: Int, result: List[String]): List[String] = {
+      n match {
+        case Nil => result
+        case head :: Nil => result ++ head.show(level)
+        case head :: tail =>
+          showTreeNodesRec(tail, l, result ++ appendToLast(head.show(level), Tree.comma.toString))
+      }
     }
+    showTreeNodesRec(nodes, level, Nil)
+  }
+
+  private def appendToLast(list: List[String], string: String): List[String] = {
+    @tailrec
+    def appendToLastRec(l: List[String], s: String, result: List[String]): List[String] = {
+      l match {
+        case Nil => result
+        case head :: Nil => result :+ (head + s)
+        case fst :: snd :: rest => appendToLastRec(snd :: rest, s, result :+ fst)
+      }
+    }
+    appendToLastRec(list, string, Nil)
   }
 }
 

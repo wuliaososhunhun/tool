@@ -20,13 +20,18 @@ case class ObjectStringAnalyserConfig(mode: Mode.Value, objStrings: List[String]
       case Mode.Compare => -\/(s"Unsupport Mode: Compare")
 
       case Mode.Print =>
-        (objStringsValidatorTemplate(1)
-          -> objStrings.map(objStringValidatorTemplate)
-          ).validate().map(_ => PrintModePrinter(objStrings.head))
+        defaultPrintValidator.validate().map(_ => PrintModePrinter(objStrings.head))
+
+      case Mode.PrintWithIndex =>
+        defaultPrintValidator.validate().map(_ => PrintWithIndexModePrinter(objStrings.head))
 
       case m => -\/(s"Unsupport Mode: $m")
     }
   }
+
+  private def defaultPrintValidator =
+    objStringsValidatorTemplate(1) ->
+      objStrings.map(objStringValidatorTemplate)
 }
 
 object ObjectStringAnalyserConfig {
