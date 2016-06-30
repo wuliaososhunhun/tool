@@ -31,7 +31,7 @@ object Validator {
 // todo: auto parse objName
 case class CollectionSizeValidator(objName: String)(col: Traversable[_])(size: Int) extends Validator {
   override def validate(): Result = {
-    if (col.size == size) \/-() else -\/(s"expect $size but found ${col.size} in $objName")
+    if (col.size == size) \/-() else -\/(s"expect $size elements but found ${col.size} in $objName")
   }
 }
 

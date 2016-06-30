@@ -17,7 +17,8 @@ case class ObjectStringAnalyserConfig(mode: Mode.Value, objStrings: List[String]
   //override def parserCmd(): OptionDef = ???
   override def validate() = {
     mode match {
-      case Mode.Compare => -\/(s"Unsupport Mode: Compare")
+      case Mode.Compare => (objStringsValidatorTemplate(2) ->
+        objStrings.map(objStringValidatorTemplate)).validate().map(_ => CompareModePrinter(objStrings.head, objStrings.last))
 
       case Mode.Print =>
         defaultPrintValidator.validate().map(_ => PrintModePrinter(objStrings.head))
