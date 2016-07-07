@@ -2,7 +2,6 @@ package objectStringAnalyser
 
 import me.ConfigBase
 import me.common.validator.{CollectionSizeValidator, StringEmptyValidator}
-import scopt.OptionDef
 
 import scalaz.-\/
 
@@ -10,11 +9,10 @@ import scalaz.-\/
   * Author: yanyang.wang
   * Date: 12/06/2016
   */
-case class ObjectStringAnalyserConfig(mode: Mode.Value, objStrings: List[String]) extends ConfigBase[Printer]("objStringAnalyser") {
+case class ObjectStringAnalyserConfig(mode: Mode.Value, objStrings: List[String]) extends ConfigBase[Printer] {
   private val objStringsValidatorTemplate = CollectionSizeValidator("objStrings")(objStrings)(_)
   private val objStringValidatorTemplate = StringEmptyValidator("objString")(_)
 
-  //override def parserCmd(): OptionDef = ???
   override def validate() = {
     mode match {
       case Mode.Compare => (objStringsValidatorTemplate(2) ->
@@ -36,5 +34,6 @@ case class ObjectStringAnalyserConfig(mode: Mode.Value, objStrings: List[String]
 }
 
 object ObjectStringAnalyserConfig {
+  val toolName = "ObjectStringAnalyser"
   implicit val modeRead: scopt.Read[Mode.Value] = scopt.Read.reads(Mode.withName)
 }

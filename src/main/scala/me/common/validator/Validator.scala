@@ -35,8 +35,22 @@ case class CollectionSizeValidator(objName: String)(col: Traversable[_])(size: I
   }
 }
 
+case class CollectionValidator(objName: String)(col: Traversable[_])(conds: (Traversable[_] => Boolean)*) extends Validator {
+  override def validate(): Result = {
+    if (conds.forall(_(col))) \/-()
+    else -\/(s"Collection $col does not meet all condition $conds")
+  }
+}
+
 case class StringEmptyValidator(objName: String)(s: String) extends Validator {
   override def validate(): Result = {
     if (s.isEmpty) -\/(s"String $objName should not be empty ") else \/-()
+  }
+}
+
+case class IntValidator(objName: String)(i: Int)(conds: (Int => Boolean)*) extends Validator {
+  override def validate: Result = {
+    if (conds.forall(_(i))) \/-()
+    else -\/(s"Int $i does not meet all condition $conds")
   }
 }
