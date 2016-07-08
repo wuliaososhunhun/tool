@@ -8,8 +8,7 @@ tools for easy life
 * collection size validation should give correct value e.g. once validate 2 ele, should return 2 element?
 
 ## Scopt
-* lens for simpleRootConfig
-* apply macro to root config
+* apply macro to advanced root config
 
 ## General
 * logging

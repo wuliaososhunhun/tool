@@ -1,6 +1,7 @@
 package me
 
 import me.objectStringAnalyser.{Mode, ObjectStringAnalyserConfig}
+import me.objectStringAnalyser.ObjectStringAnalyserConfig._
 import me.uuid.UuidGeneratorConfig
 
 /**
@@ -17,6 +18,8 @@ object CommandLineMain {
   }
 
   private def parseArgs(args: Array[String]): Option[SimpleRootConfig] = {
+    import SimpleRootConfig._
+
     val title =
       """ _____ ______       ___    ___      _________  ________  ________  ___       ________
         ||\   _ \  _   \    |\  \  /  /|    |\___   ___\\   __  \|\   __  \|\  \     |\   ____\
@@ -35,12 +38,11 @@ object CommandLineMain {
         .text("Print Scala Object String pretty or Compare two of them")
         .children(
           opt[Mode.Value]('m', "mode").required()
-            .action((x, c) => c.copy(objStringAnalyser = c.objStringAnalyser.copy(mode = x))).text("mode"),
+            .action((x, c) => (objectStringAnalyserConfig >=> osaMode).set(c, x))
+            .text("mode"),
           opt[String]('t', "text").minOccurs(1).unbounded()
-            .action { (x, c) =>
-              val config = c.objStringAnalyser
-              c.copy(objStringAnalyser = config.copy(objStrings = config.objStrings :+ x))
-            }.text("input object strings")
+            .action((x, c) => objectStringAnalyserConfig >=> osaObjStrings mod(_ :+ x, c))
+            .text("input object strings")
         )
       note("")
       cmd(UuidGeneratorConfig.toolName)
@@ -48,7 +50,8 @@ object CommandLineMain {
         .text("Generate list of UUID")
         .children(
           opt[Int]('n', "number")
-            .action((x, c) => c.copy(uuidGenerator = c.uuidGenerator.copy(number = x))).text("number of UUID requested")
+            .action((x, c) => (uuidGeneratorConfig >=> ugNumber).set(c, x))
+            .text("number of UUID requested")
         )
       checkConfig(c => c.validate().map { _ => }.toEither)
     }
