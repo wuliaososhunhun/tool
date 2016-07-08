@@ -10,7 +10,7 @@ import me.uuid.UuidGeneratorConfig
 object CommandLineMain {
 
   def main(args: Array[String]): Unit = {
-    parseArgs(args).map(config => config.choosenTool match {
+    parseArgs(args).map(config => config.chosenTool match {
       case ObjectStringAnalyserConfig.toolName => config.objStringAnalyser.validate().map(_.run())
       case UuidGeneratorConfig.toolName => config.uuidGenerator.validate().map(_.run())
     })
@@ -31,7 +31,7 @@ object CommandLineMain {
       help("help").text("prints this usage text")
       note("")
       cmd(ObjectStringAnalyserConfig.toolName)
-        .action((x, c) => c.copy(choosenTool = ObjectStringAnalyserConfig.toolName))
+        .action((x, c) => c.copy(chosenTool = ObjectStringAnalyserConfig.toolName))
         .text("Print Scala Object String pretty or Compare two of them")
         .children(
           opt[Mode.Value]('m', "mode").required()
@@ -44,7 +44,7 @@ object CommandLineMain {
         )
       note("")
       cmd(UuidGeneratorConfig.toolName)
-        .action((x, c) => c.copy(choosenTool = UuidGeneratorConfig.toolName))
+        .action((x, c) => c.copy(chosenTool = UuidGeneratorConfig.toolName))
         .text("Generate list of UUID")
         .children(
           opt[Int]('n', "number")
