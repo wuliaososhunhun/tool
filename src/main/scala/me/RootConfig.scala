@@ -1,6 +1,6 @@
 package me
 
-import _root_.objectStringAnalyser.{Mode, ObjectStringAnalyserConfig}
+import me.objectStringAnalyser.{Mode, ObjectStringAnalyserConfig}
 import me.uuid.UuidGeneratorConfig
 import shapeless.HMap
 

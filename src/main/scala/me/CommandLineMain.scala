@@ -1,4 +1,5 @@
-import me.SimpleRootConfig
+package me
+
 import me.objectStringAnalyser.{Mode, ObjectStringAnalyserConfig}
 import me.uuid.UuidGeneratorConfig
 
