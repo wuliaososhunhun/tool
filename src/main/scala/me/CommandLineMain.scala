@@ -1,8 +1,6 @@
+import me.SimpleRootConfig
+import me.objectStringAnalyser.{Mode, ObjectStringAnalyserConfig}
 import me.uuid.UuidGeneratorConfig
-import objectStringAnalyser.{Mode, ObjectStringAnalyserConfig}
-import ObjectStringAnalyserConfig._
-
-import scalaz.{-\/, \/}
 
 /**
   * Author: yanyang.wang
@@ -55,17 +53,5 @@ object CommandLineMain {
     }
 
     parser.parse(args, SimpleRootConfig())
-  }
-}
-
-case class SimpleRootConfig(choosenTool: String = "",
-                            objStringAnalyser: ObjectStringAnalyserConfig = ObjectStringAnalyserConfig(Mode.Print, Nil),
-                            uuidGenerator: UuidGeneratorConfig = UuidGeneratorConfig(1)) {
-  def validate(): \/[String, Any] = {
-    choosenTool match {
-      case ObjectStringAnalyserConfig.toolName => objStringAnalyser.validate()
-      case UuidGeneratorConfig.toolName => uuidGenerator.validate()
-      case _ => -\/(s"Tool $choosenTool is not supported")
-    }
   }
 }

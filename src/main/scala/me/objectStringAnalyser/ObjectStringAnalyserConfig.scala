@@ -1,4 +1,4 @@
-package objectStringAnalyser
+package me.objectStringAnalyser
 
 import me.ConfigBase
 import me.common.validator.{CollectionSizeValidator, StringEmptyValidator}

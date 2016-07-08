@@ -15,6 +15,5 @@ tools for easy life
 * logging
 
 ## New feature
-* UUID generator
 * random picker
 * url param fetcher
