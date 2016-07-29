@@ -1,14 +1,15 @@
 package me
 
-import me.objectStringAnalyser.{Mode, ObjectStringAnalyserConfig}
+import me.SimpleRootConfig._
 import me.objectStringAnalyser.ObjectStringAnalyserConfig._
+import me.objectStringAnalyser.{Mode, ObjectStringAnalyserConfig}
 import me.uuid.UuidGeneratorConfig
 
 /**
   * Author: yanyang.wang
   * Date: 10/06/2016
   */
-object CommandLineMain {
+object CommandLineMainSimple {
 
   def main(args: Array[String]): Unit = {
     parseArgs(args).map(config => config.chosenTool match {
@@ -18,19 +19,8 @@ object CommandLineMain {
   }
 
   private def parseArgs(args: Array[String]): Option[SimpleRootConfig] = {
-    import SimpleRootConfig._
-
-    val title =
-      """ _____ ______       ___    ___      _________  ________  ________  ___       ________
-        ||\   _ \  _   \    |\  \  /  /|    |\___   ___\\   __  \|\   __  \|\  \     |\   ____\
-        |\ \  \\\__\ \  \   \ \  \/  / /    \|___ \  \_\ \  \|\  \ \  \|\  \ \  \    \ \  \___|_
-        | \ \  \\|__| \  \   \ \    / /          \ \  \ \ \  \\\  \ \  \\\  \ \  \    \ \_____  \
-        |  \ \  \    \ \  \   \/  /  /            \ \  \ \ \  \\\  \ \  \\\  \ \  \____\|____|\  \
-        |   \ \__\    \ \__\__/  / /               \ \__\ \ \_______\ \_______\ \_______\____\_\  \
-        |    \|__|     \|__|\___/ /                 \|__|  \|_______|\|_______|\|_______|\_________\
-        |                  \|___|/                                                      \|_________|""".stripMargin
     val parser = new scopt.OptionParser[SimpleRootConfig]("Tools") {
-      head(title)
+      head(ParserTemplate.title, "simple")
       help("help").text("prints this usage text")
       note("")
       cmd(ObjectStringAnalyserConfig.toolName)

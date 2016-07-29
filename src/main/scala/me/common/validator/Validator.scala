@@ -25,7 +25,6 @@ object Validator {
 
     def validate(): Validator.Result = validators.foldLeft(\/.right[String, Unit]())((a, b) => a.flatMap(_ => b.validate()))
   }
-
 }
 
 // todo: auto parse objName
@@ -38,7 +37,7 @@ case class CollectionSizeValidator(objName: String)(col: Traversable[_])(size: I
 case class CollectionValidator(objName: String)(col: Traversable[_])(conds: (Traversable[_] => Boolean)*) extends Validator {
   override def validate(): Result = {
     if (conds.forall(_(col))) \/-()
-    else -\/(s"Collection $col does not meet all condition $conds")
+    else -\/(s"Collection $objName does not meet all condition $conds")
   }
 }
 
