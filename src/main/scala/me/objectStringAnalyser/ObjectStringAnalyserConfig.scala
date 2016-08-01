@@ -1,6 +1,6 @@
 package me.objectStringAnalyser
 
-import me.ConfigBase
+import me.{ParserTemplate, ConfigBase}
 import me.common.validator.{CollectionSizeValidator, StringEmptyValidator}
 
 import scalaz.-\/
@@ -34,6 +34,21 @@ case class ObjectStringAnalyserConfig(mode: Mode.Value, objStrings: List[String]
 }
 
 object ObjectStringAnalyserConfig {
-  val toolName = "ObjectStringAnalyser"
+  val toolName = "ObjectAnalyser".toLowerCase
   implicit val modeRead: scopt.Read[Mode.Value] = scopt.Read.reads(Mode.withName)
+
+  val parser = new ParserTemplate[ObjectStringAnalyserConfig] {
+    wrap(
+      cmd(toolName)
+        .text("Print Scala Object String pretty or Compare two of them")
+        .children(
+          opt[Mode.Value]('m', "mode").required()
+            .action((x, c) => c.copy(mode = x))
+            .text("mode"),
+          opt[String]('t', "text").minOccurs(1).unbounded()
+            .action((x, c) => c.copy(objStrings = c.objStrings :+ x))
+            .text("input object strings")
+        )
+    )
+  }
 }

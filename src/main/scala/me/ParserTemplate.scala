@@ -7,14 +7,14 @@ import scopt.{OptionDef, OptionParser}
   * Date: 28/07/2016
   */
 abstract class ParserTemplate[T <: ConfigBase[_ <: ToolBase]] extends OptionParser[T]("tool") {
-  def wrap(version: String, embed: => OptionDef[Unit, T]) = {
-    start(version)
+  def wrap(embed: => OptionDef[Unit, T]) = {
+    start()
     embed
     end()
   }
 
-  private def start(version: String) = {
-    head(ParserTemplate.title, version)
+  private def start() = {
+    head(ParserTemplate.title, "dynamic")
     help("help").text("prints this usage text")
     note("")
   }

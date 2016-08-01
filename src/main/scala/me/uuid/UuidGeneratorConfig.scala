@@ -1,6 +1,6 @@
 package me.uuid
 
-import me.ConfigBase
+import me.{ParserTemplate, ConfigBase}
 import me.common.validator.IntValidator
 
 /**
@@ -14,5 +14,17 @@ case class UuidGeneratorConfig(number: Int) extends ConfigBase[UuidGenerator] {
 }
 
 object UuidGeneratorConfig {
-  val toolName = "UuidGenerator"
+  val toolName = "Uuid".toLowerCase
+
+  val parser: ParserTemplate[UuidGeneratorConfig] = new ParserTemplate[UuidGeneratorConfig] {
+    wrap(
+      cmd(toolName)
+        .text("Generate list of UUID")
+        .children(
+          opt[Int]('n', "number")
+            .action((x, c) => c.copy(number = x))
+            .text("number of UUID requested")
+        )
+    )
+  }
 }

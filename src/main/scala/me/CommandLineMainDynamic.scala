@@ -20,44 +20,16 @@ object CommandLineMainDynamic {
 
   def main(args: Array[String]): Unit = {
     (CollectionValidator("Input args")(args)(_.nonEmpty) ->
-      CollectionValidator("support tools")(defaultConfigMap.keys)(_.exists(_ == args.head))).validate() match {
+      CollectionValidator("support tools")(defaultConfigMap.keys)(_.exists(_ == args.head.toLowerCase))).validate() match {
       case -\/(error) => println("Error: " + error)
-      case \/-(()) => dynamicParseArgs(args, defaultConfigMap(args.head)).map(_.validate().map(_.run()))
+      case \/-(()) => dynamicParseArgs(args, defaultConfigMap(args.head.toLowerCase)).map(_.validate().map(_.run()))
     }
   }
 
-  private def dynamicParseArgs[T](args: Array[String], defaultConfig: T): Option[_ <: ConfigBase[_ <: ToolBase]] = {
+  private def dynamicParseArgs[T <: ConfigBase[_ <: ToolBase]](args: Array[String], defaultConfig: T): Option[_ <: ConfigBase[_ <: ToolBase]] = {
     defaultConfig match {
-      case dc: ObjectStringAnalyserConfig =>
-        new ParserTemplate[ObjectStringAnalyserConfig] {
-          wrap(
-            toolVersion,
-            cmd(ObjectStringAnalyserConfig.toolName)
-              .text("Print Scala Object String pretty or Compare two of them")
-              .children(
-                opt[Mode.Value]('m', "mode").required()
-                  .action((x, c) => c.copy(mode = x))
-                  .text("mode"),
-                opt[String]('t', "text").minOccurs(1).unbounded()
-                  .action((x, c) => c.copy(objStrings = c.objStrings :+ x))
-                  .text("input object strings")
-              )
-          )
-        }.parse(args, dc)
-
-      case dc: UuidGeneratorConfig =>
-        new ParserTemplate[UuidGeneratorConfig] {
-          wrap(
-            toolVersion,
-            cmd(UuidGeneratorConfig.toolName)
-              .text("Generate list of UUID")
-              .children(
-                opt[Int]('n', "number")
-                  .action((x, c) => c.copy(number = x))
-                  .text("number of UUID requested")
-              )
-          )
-        }.parse(args, dc)
+      case dc: ObjectStringAnalyserConfig => ObjectStringAnalyserConfig.parser.parse(args, dc)
+      case dc: UuidGeneratorConfig => UuidGeneratorConfig.parser.parse(args, dc)
     }
   }
 }

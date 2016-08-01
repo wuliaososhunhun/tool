@@ -34,7 +34,7 @@ case class CollectionSizeValidator(objName: String)(col: Traversable[_])(size: I
   }
 }
 
-case class CollectionValidator(objName: String)(col: Traversable[_])(conds: (Traversable[_] => Boolean)*) extends Validator {
+case class CollectionValidator[T](objName: String)(col: Traversable[T])(conds: (Traversable[T] => Boolean)*) extends Validator {
   override def validate(): Result = {
     if (conds.forall(_(col))) \/-()
     else -\/(s"Collection $objName does not meet all condition $conds")
