@@ -7,6 +7,8 @@ import scopt.{OptionDef, OptionParser}
   * Date: 28/07/2016
   */
 abstract class ParserTemplate[T <: ConfigBase[_ <: ToolBase]] extends OptionParser[T]("tool") {
+  override def showUsageOnError = true
+
   def wrap(embed: => OptionDef[Unit, T]) = {
     start()
     embed
