@@ -3,6 +3,7 @@ package me
 import me.common.validator.CollectionValidator
 import me.objectStringAnalyser.{Mode, ObjectStringAnalyserConfig}
 import me.random.RandomPickerConfig
+import me.urlDecoder.UrlDecoderConfig
 import me.uuid.UuidGeneratorConfig
 
 import scalaz.{-\/, \/-}
@@ -15,7 +16,8 @@ object CommandLineMainDynamic {
   val defaultConfigMap: Map[String, _ <: ConfigBase[_ <: ToolBase]] = Map(
     ObjectStringAnalyserConfig.toolName -> ObjectStringAnalyserConfig(Mode.Print, Nil),
     UuidGeneratorConfig.toolName -> UuidGeneratorConfig(1),
-    RandomPickerConfig.toolName -> RandomPickerConfig(10, 100, Nil)
+    RandomPickerConfig.toolName -> RandomPickerConfig(10, 100, Nil),
+    UrlDecoderConfig.toolName -> UrlDecoderConfig("")
   )
 
   def main(args: Array[String]): Unit = {
@@ -31,6 +33,7 @@ object CommandLineMainDynamic {
       case dc: ObjectStringAnalyserConfig => ObjectStringAnalyserConfig.parser.parse(args, dc)
       case dc: UuidGeneratorConfig => UuidGeneratorConfig.parser.parse(args, dc)
       case dc: RandomPickerConfig => RandomPickerConfig.parser.parse(args, dc)
+      case dc: UrlDecoderConfig => UrlDecoderConfig.parser.parse(args, dc)
     }
   }
 }
