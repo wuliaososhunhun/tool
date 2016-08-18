@@ -1,7 +1,7 @@
 package me.uuid
 
-import me.{ParserTemplate, ConfigBase}
-import me.common.validator.IntValidator
+import me.common.validator.ObjectValidator
+import me.{ConfigBase, ParserTemplate}
 
 /**
   * Author: yanyang.wang
@@ -9,7 +9,7 @@ import me.common.validator.IntValidator
   */
 case class UuidGeneratorConfig(number: Int) extends ConfigBase[UuidGenerator] {
   override def validate() = {
-    IntValidator("number")(number)(_ > 0).validate.map(_ => UuidGenerator(number))
+    ObjectValidator("number")(number)(_ > 0).validate().map(_ => UuidGenerator(number))
   }
 }
 

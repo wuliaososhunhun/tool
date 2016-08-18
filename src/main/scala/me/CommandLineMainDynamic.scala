@@ -1,6 +1,6 @@
 package me
 
-import me.common.validator.CollectionValidator
+import me.common.validator.ObjectValidator
 import me.objectStringAnalyser.{Mode, ObjectStringAnalyserConfig}
 import me.random.RandomPickerConfig
 import me.urlDecoder.UrlDecoderConfig
@@ -21,8 +21,8 @@ object CommandLineMainDynamic {
   )
 
   def main(args: Array[String]): Unit = {
-    (CollectionValidator("Input args")(args)(_.nonEmpty) ->
-      CollectionValidator("support tools")(defaultConfigMap.keys)(_.exists(_ == args.head.toLowerCase))).validate() match {
+    (ObjectValidator("Input args")(args)(_.nonEmpty) ~>
+      ObjectValidator("support tools")(defaultConfigMap.keys)(_.exists(_ == args.head.toLowerCase))).validate() match {
       case -\/(error) => println("Error: " + error)
       case \/-(()) => dynamicParseArgs(args, defaultConfigMap(args.head.toLowerCase)).map(_.validate().map(_.run()))
     }

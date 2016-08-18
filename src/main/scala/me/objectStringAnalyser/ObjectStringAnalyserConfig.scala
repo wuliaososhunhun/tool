@@ -1,7 +1,7 @@
 package me.objectStringAnalyser
 
-import me.{ParserTemplate, ConfigBase}
-import me.common.validator.{CollectionSizeValidator, StringEmptyValidator}
+import me.common.validator.ObjectValidator
+import me.{ConfigBase, ParserTemplate}
 
 import scalaz.-\/
 
@@ -10,13 +10,12 @@ import scalaz.-\/
   * Date: 12/06/2016
   */
 case class ObjectStringAnalyserConfig(mode: Mode.Value, objStrings: List[String]) extends ConfigBase[Printer] {
-  private val objStringsValidatorTemplate = CollectionSizeValidator("objStrings")(objStrings)(_)
-  private val objStringValidatorTemplate = StringEmptyValidator("objString")(_)
+  private val objStringsValidatorTemplate = ObjectValidator("objStrings")(objStrings)(_)
 
   override def validate() = {
     mode match {
-      case Mode.Compare => (objStringsValidatorTemplate(2) ->
-        objStrings.map(objStringValidatorTemplate)).validate().map(_ => CompareModePrinter(objStrings.head, objStrings.last))
+      case Mode.Compare => (objStringsValidatorTemplate(_.size == 2) ~>
+        objStrings.map(ObjectValidator("Str")(_)(_.nonEmpty))).validate().map(_ => CompareModePrinter(objStrings.head, objStrings.last))
 
       case Mode.Print =>
         defaultPrintValidator.validate().map(_ => PrintModePrinter(objStrings.head))
@@ -29,8 +28,8 @@ case class ObjectStringAnalyserConfig(mode: Mode.Value, objStrings: List[String]
   }
 
   private def defaultPrintValidator =
-    objStringsValidatorTemplate(1) ->
-      objStrings.map(objStringValidatorTemplate)
+    objStringsValidatorTemplate(_.size == 1) ~>
+      objStrings.map(ObjectValidator("str")(_)(_.nonEmpty))
 }
 
 object ObjectStringAnalyserConfig {
