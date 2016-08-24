@@ -25,7 +25,7 @@ object CommandLineMainDynamic {
     val supportTools = defaultConfigMap.keys
     (Validator[Array[String]](inputArgs, _.nonEmpty) ~>
       Validator[Iterable[String]](supportTools, _.exists(_ == inputArgs.head.toLowerCase))).validate() match {
-      case -\/(error) => println("Error: " + error)
+      case -\/(error) => println("Error: " + ParserTemplate.consoleRedWrapper(error) + "\n\n\n")
       case \/-(()) => dynamicParseArgs(inputArgs, defaultConfigMap(inputArgs.head.toLowerCase)).map(_.validate().map(_.run()))
     }
   }

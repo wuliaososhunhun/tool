@@ -22,7 +22,7 @@ abstract class ParserTemplate[T <: ConfigBase[_ <: ToolBase]] extends OptionPars
   }
 
   private def end() = {
-    checkConfig(c => c.validate().map { _ => }.toEither)
+    checkConfig(c => c.validate().leftMap(ParserTemplate.consoleRedWrapper).map { _ => }.toEither)
   }
 }
 
@@ -36,4 +36,6 @@ object ParserTemplate {
       |   \ \__\    \ \__\__/  / /               \ \__\ \ \_______\ \_______\ \_______\____\_\  \
       |    \|__|     \|__|\___/ /                 \|__|  \|_______|\|_______|\|_______|\_________\
       |                  \|___|/                                                      \|_________|""".stripMargin
+
+  def consoleRedWrapper(text: String) = Console.RED + text + Console.RESET
 }

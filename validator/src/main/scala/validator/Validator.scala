@@ -35,23 +35,19 @@ object Validator {
   def validatorMacro[T: c.WeakTypeTag](c: whitebox.Context)(obj: c.Tree, cond: c.Tree) = {
     import c.universe._
 
-    def polishConditionCode(objCode: String, condCode: String) = {
-      println("+++")
-      println(objCode)
-      println(condCode)
-
-      val pattern = "^(\\()\\((x\\$\\d+)(:.*? => )(.*)$".r
-      pattern findFirstIn condCode match {
-        case Some(pattern(g1, g2, _, g5)) =>
-          (g1 + g5).replace(g2, objCode)
-        case None => condCode
-      }
-    }
-
-    val objCode =  showCode(obj).split('.').last
+    val objCode = showCode(obj).split('.').last
     val condCode = polishConditionCode(objCode, showCode(cond))
 
     val msgTemplate = s"Object $objCode(%s) does not meet condition$condCode"
     q"new Validator($obj, $cond, $msgTemplate.format($obj))"
+  }
+
+  private def polishConditionCode(objCode: String, condCode: String) = {
+    val pattern = "^(\\()\\((x\\$\\d+)(:.*? => )(.*)$".r
+    pattern findFirstIn condCode match {
+      case Some(pattern(g1, g2, _, g5)) =>
+        (g1 + g5).replace(g2, objCode)
+      case None => condCode
+    }
   }
 }
