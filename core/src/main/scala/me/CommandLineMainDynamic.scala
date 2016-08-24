@@ -1,10 +1,11 @@
 package me
 
-import me.common.validator.ObjectValidator
 import me.objectStringAnalyser.{Mode, ObjectStringAnalyserConfig}
 import me.random.RandomPickerConfig
 import me.urlDecoder.UrlDecoderConfig
 import me.uuid.UuidGeneratorConfig
+import validator.Validator
+import validator.Validator._
 
 import scalaz.{-\/, \/-}
 
@@ -20,11 +21,12 @@ object CommandLineMainDynamic {
     UrlDecoderConfig.toolName -> UrlDecoderConfig("")
   )
 
-  def main(args: Array[String]): Unit = {
-    (ObjectValidator("Input args")(args)(_.nonEmpty) ~>
-      ObjectValidator("support tools")(defaultConfigMap.keys)(_.exists(_ == args.head.toLowerCase))).validate() match {
+  def main(inputArgs: Array[String]): Unit = {
+    val supportTools = defaultConfigMap.keys
+    (Validator[Array[String]](inputArgs, _.nonEmpty) ~>
+      Validator[Iterable[String]](supportTools, _.exists(_ == inputArgs.head.toLowerCase))).validate() match {
       case -\/(error) => println("Error: " + error)
-      case \/-(()) => dynamicParseArgs(args, defaultConfigMap(args.head.toLowerCase)).map(_.validate().map(_.run()))
+      case \/-(()) => dynamicParseArgs(inputArgs, defaultConfigMap(inputArgs.head.toLowerCase)).map(_.validate().map(_.run()))
     }
   }
 

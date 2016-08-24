@@ -1,7 +1,7 @@
 package me.random
 
-import me.common.validator.ObjectValidator
 import me.{ConfigBase, ParserTemplate}
+import validator.Validator
 
 /**
   * Author: yanyang.wang
@@ -9,8 +9,8 @@ import me.{ConfigBase, ParserTemplate}
   */
 case class RandomPickerConfig(number: Int, maxInt: Int, values: List[String]) extends ConfigBase[RandomPicker] {
   override def validate() = {
-    (ObjectValidator("number")(number)(_ > 0) ~>
-      ObjectValidator("maxInt")(maxInt)(_ > 0))
+    (Validator[Int](number, _ > 0) ~>
+      Validator[Int](maxInt, _ > 0))
       .validate().map(_ => RandomPicker(number, maxInt, values))
   }
 }

@@ -27,7 +27,7 @@ abstract class ParserTemplate[T <: ConfigBase[_ <: ToolBase]] extends OptionPars
 }
 
 object ParserTemplate {
-  val title =
+  val title = "\n\n\n" +
     """ _____ ______       ___    ___      _________  ________  ________  ___       ________
       ||\   _ \  _   \    |\  \  /  /|    |\___   ___\\   __  \|\   __  \|\  \     |\   ____\
       |\ \  \\\__\ \  \   \ \  \/  / /    \|___ \  \_\ \  \|\  \ \  \|\  \ \  \    \ \  \___|_

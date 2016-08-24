@@ -1,7 +1,7 @@
 package me.urlDecoder
 
-import me.common.validator.ObjectValidator
 import me.{ConfigBase, ParserTemplate}
+import validator.Validator
 
 /**
   * Author: yanyang.wang
@@ -9,7 +9,7 @@ import me.{ConfigBase, ParserTemplate}
   */
 case class UrlDecoderConfig(value: String) extends ConfigBase[UrlDecoder] {
   override def validate() = {
-    ObjectValidator("url")(value)(_.nonEmpty).validate().map(_ => UrlDecoder(value))
+    Validator[String](value, _.nonEmpty).validate().map(_ => UrlDecoder(value))
   }
 }
 

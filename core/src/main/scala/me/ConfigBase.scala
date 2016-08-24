@@ -1,6 +1,6 @@
 package me
 
-import scalaz._
+import scalaz.\/
 
 /**
   * Author: yanyang.wang
